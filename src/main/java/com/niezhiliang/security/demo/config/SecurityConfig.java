@@ -71,13 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 处理自动登录逻辑
                 .userDetailsService(userDetailService)
                 .and()
+                //配置退出
                 .logout()
                 .logoutUrl("/signout")
                 .logoutSuccessUrl("/user/signout")
                 .deleteCookies("JSESSIONID")
                 .and()
                 .authorizeRequests()
-                //白名单列表，无需登录
+                //白名单列表，无需认证
                 .antMatchers("/login","/user/unlogin",
                         "/user/signout")
                 .permitAll()
@@ -108,10 +109,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
+        //是否自动创建表
         jdbcTokenRepository.setCreateTableOnStartup(false);
         return jdbcTokenRepository;
     }
-
-
 
 }

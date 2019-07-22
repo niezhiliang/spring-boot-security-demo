@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Date 2019/07/18 11:19
  */
 @SpringBootApplication
-@MapperScan("com.niezhiliang.security.demo.mapper")
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class);
