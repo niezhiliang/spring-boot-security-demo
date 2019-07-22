@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 60
+
+
+spring:
+  datasource:
+    name: voting_app
+    url: jdbc:mysql://127.0.0.1:3306/test-security?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: adminadmin
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+  session:
+    store-type: redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: adminadmin
+    timeout: 5000
+
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto

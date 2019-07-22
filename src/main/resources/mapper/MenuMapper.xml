@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.niezhiliang.security.demo.mapper.MenuMapper">
+
+
+    <!--这个是返回结果集对象-->
+    <resultMap id="RoleMenuMap" type="com.niezhiliang.security.demo.entity.RoleMenuInfo">
+        <id column="id" jdbcType="INTEGER" property="roleId" />
+        <result column="roleName" jdbcType="VARCHAR" property="roleName" />
+        <collection property="menuTreeList" javaType="java.util.ArrayList" column="roleId=id"
+                    select="getMenu">
+
+        </collection>
+    </resultMap>
+    <!--这个是返回结果中的menuList属性结果集对象-->
+    <resultMap id="ParentMenu" type="com.niezhiliang.security.demo.entity.MenuTree">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="parent" jdbcType="INTEGER" property="parent" />
+        <result column="menuName" jdbcType="VARCHAR" property="menuName" />
+        <result column="pathUrl" jdbcType="VARCHAR" property="pathUrl" />
+        <result column="perms" jdbcType="VARCHAR" property="perms" />
+        <!--column 作用是传参给getChildMenu这个sql使用-->
+        <collection property="menuList" javaType="java.util.ArrayList" column="{roleId=rId,id=id}"
+                    select="getChildMenu">
+        </collection>
+    </resultMap>
+
+    <!-- 查询这个方法-->
+    <select id="selectSubMenu" resultMap="RoleMenuMap">
+       select * from role where id = #{roleId}
+    </select>
+
+    <!--查询当前角色下所有的顶层的菜单-->
+    <select id="getMenu" resultMap="ParentMenu">
+       select * from menu m left join role_menu r on m.id = r.mid where r.rid = #{roleId} and m.parent = 0
+    </select>
+
+
+    <!--通过上一层的菜单编号查询改角色所有的子菜单-->
+    <select id="getChildMenu" resultMap="ParentMenu">
+   	   select * from menu m left join role_menu r on m.id = r.mId where r.rId = #{roleId} and m.parent = #{id}
+    </select>
+
+</mapper>
