@@ -3,6 +3,7 @@ package com.niezhiliang.security.demo.config;
 import com.niezhiliang.security.demo.handler.MyAuthenticationAccessDeniedHandler;
 import com.niezhiliang.security.demo.handler.MyAuthenticationFailureHandler;
 import com.niezhiliang.security.demo.handler.MyAuthenticationSucessHandler;
+import com.niezhiliang.security.demo.handler.SmsCodeFilter;
 import com.niezhiliang.security.demo.service.impl.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.sql.DataSource;
 
@@ -45,10 +47,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private SmsCodeFilter smsCodeFilter;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.exceptionHandling()
+        http.addFilterBefore(smsCodeFilter,UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
                 //处理权限不足
                 .accessDeniedHandler(myAuthenticationAccessDeniedHandler)
                 .and()
@@ -80,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //白名单列表，无需认证
                 .antMatchers("/login","/user/unlogin",
-                        "/user/signout")
+                        "/user/signout","/code/sms","/login/mobile")
                 .permitAll()
                 //所有方法都要进行认证
                 .anyRequest()

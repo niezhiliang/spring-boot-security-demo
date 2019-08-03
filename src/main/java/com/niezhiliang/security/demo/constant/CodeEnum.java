@@ -21,7 +21,7 @@ public enum CodeEnum {
 
     PERMISSION_DENIED(10002,"很抱歉，您没有该访问权限"),
 
-    LOGIN_EXPIRED(10002,"登录失效，请重新登录")
+    LOGIN_EXPIRED(10003,"登录失效，请重新登录")
     ;
 
 

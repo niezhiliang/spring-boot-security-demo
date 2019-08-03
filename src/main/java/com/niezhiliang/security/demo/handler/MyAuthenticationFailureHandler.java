@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.niezhiliang.security.demo.constant.CodeEnum;
 import com.niezhiliang.security.demo.constant.ResultVO;
+import com.niezhiliang.security.demo.exception.ValidateCodeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
@@ -46,8 +47,8 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
             message = "账户已过期！";
         } else if (exception instanceof CredentialsExpiredException) {
             message = "用户密码已过期！";
-//        } else if (exception instanceof ValidateCodeException || exception instanceof FebsCredentialExcetion) {
-//            message = exception.getMessage();
+        } else if (exception instanceof ValidateCodeException) {
+            message = exception.getMessage();
         } else {
             message = "认证失败，请联系网站管理员！";
         }

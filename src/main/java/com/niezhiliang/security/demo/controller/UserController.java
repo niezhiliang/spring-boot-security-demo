@@ -37,4 +37,10 @@ public class UserController {
     public String signout() {
        return ResultUtils.success("退出成功");
     }
+
+    @RequestMapping(value = "/login/mobile")
+    public String  phoneLogin() {
+
+        return "success";
+    }
 }
